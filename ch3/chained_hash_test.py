@@ -1,0 +1,48 @@
+from enum import Enum
+from chained_hash import ChainedHash
+
+Menu = Enum('Menu', ['추가', '삭제', '검색', '덤프', '종료'])
+
+
+def select_menu() -> Menu:
+    """ 메뉴 선택"""
+    s = [f'({m.value}){m.name}' for m in Menu]
+    while True:
+        print(*s, sep='   ', end='')
+        n = int(input(' : '))
+        if 1 <= n <= len(Menu):
+            return Menu(n)
+
+
+hash = ChainedHash(13)
+
+while True:
+    menu = select_menu()
+
+    if menu == Menu.추가:
+        key = int(input('추가할 키를 입력하세요: '))
+        value = input('추가할 값을 입력하세요: ')
+        if not hash.add(key, value):
+            print('추가에 실패했습니다')
+
+    elif menu == Menu.삭제:
+        key = int(input('삭제할 키를 입력하세요: '))
+        if not hash.remove(key):
+            print('삭제에 실패했습니다.')
+
+    elif menu == Menu.검색:
+        key = int(input('검색할 키를 입력하세요: '))
+        searched_value = hash.search(key)
+
+        if searched_value is not None:
+            print(f"검색 결과 : {searched_value}")
+
+        else:
+            print('검색할 데이터가 없습니다')
+
+    elif menu == Menu.덤프:
+        hash.dump()
+
+    else:
+        break
+
